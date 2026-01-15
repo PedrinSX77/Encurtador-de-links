@@ -1,29 +1,40 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>Meu Encurtador</title>
     <link rel="stylesheet" href="assets/css/style.css">
 </head>
-<body>
+
 <body>
 
-    <div class="container">
-        <h1>ShorterLinks</h1>
-        <p class="subtitle">Insira a URL completa (com https://)</p>
-        
-        <div class="input-group">
-            <input type="text" id="urlInput" placeholder="Ex: https://google.com.br">
-            <button onclick="encurtar()">Gerar Link Curto</button>
-        </div>
+    <body>
+        <button onclick="logout()">Sair</button>
+        <div class="container">
+            <h1>ShorterLinks</h1>
+            <p class="subtitle">Insira a URL completa (com https://)</p>
 
-        <div id="resultado-container">
-            <span>Link pronto:</span>
-            <div class="url-box">
-                <a href="#" id="linkFinal" class="url-text" target="_blank"></a>
-                <button class="btn-copy" onclick="copiarLink()">Copiar</button>
+            <div class="input-group">
+                <input type="text" id="urlInput" placeholder="Ex: https://google.com.br">
+                <button onclick="encurtar()">Gerar Link Curto</button>
+            </div>
+
+            <div id="resultado-container">
+                <span>Link pronto:</span>
+                <div class="url-box">
+                    <a href="#" id="linkFinal" class="url-text" target="_blank"></a>
+                    <button class="btn-copy" onclick="copiarLink()">Copiar</button>
+                </div>
             </div>
         </div>
-    </div>
-    <script src="assets/js/api.js"  defer ></script>
-</body>
+        <div id="modal-bloqueio">
+            <div class="modal-content">
+                <h2>Acesso Restrito</h2>
+                <p>Você precisa estar logado para encurtar links.</p>
+                <button onclick="window.location.href='/auth/login/'">Ir para Login</button>
+            </div>
+        </div>
+        <script src="assets/js/api.js" defer></script>
+    </body>
+
 </html>

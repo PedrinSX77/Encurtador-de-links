@@ -1,4 +1,5 @@
 async function encurtar() {
+    const token = localStorage.getItem('token');
     const url = document.getElementById('urlInput').value;
     const btn = document.querySelector('button');
     const resContainer = document.getElementById('resultado-container');
@@ -10,10 +11,13 @@ async function encurtar() {
 
     try {
         const res = await fetch('/encurtar', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ urlOriginal: url })
-        });
+        method: 'POST',
+        headers: { 
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}` 
+        },
+        body: JSON.stringify({ urlOriginal: url })
+    });
 
         const data = await res.json();
 
@@ -35,6 +39,32 @@ async function encurtar() {
 
 function copiarLink() {
     const link = document.getElementById('linkFinal').innerText;
-    navigator.clipboard.writeText(link);
-    alert("Copiado para a área de transferência!");
+    navigator.clipboard.writeText(link).then(() => {
+        const btn = document.querySelector('.btn-copy');
+        btn.innerText = "Copiado!";
+        btn.style.background = "#22c55e"; 
+        
+        setTimeout(() => {
+            btn.innerText = "Copiar";
+            btn.style.background = "#38bdf8";
+        }, 2000);
+    });
 }
+
+function logout() {
+    localStorage.removeItem('token');
+    window.location.href = '/auth/login';
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    const token = localStorage.getItem('token');
+    const modal = document.getElementById('modal-bloqueio');
+
+    if (!token) {
+        modal.style.display = 'flex'; 
+        
+        setTimeout(() => {
+            if(!token) window.location.href = '/auth/login/';
+        }, 3000);
+    }
+});

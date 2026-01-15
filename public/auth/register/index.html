@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>ShorterLinks - Cadastro</title>
+    <link rel="stylesheet" href="/assets/css/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Criar Conta</h1>
+        <p class="subtitle">Cadastre-se para gerenciar seus links</p>
+        
+        <div class="input-group">
+            <input type="text" id="username" placeholder="Nome de usuário">
+            <input type="email" id="email" placeholder="E-mail">
+            <input type="password" id="password" placeholder="Senha">
+            <button onclick="doRegister()">Cadastrar</button>
+        </div>
+
+        <div class="auth-footer">
+            Já tem uma conta? <a href="/auth/login">Entre aqui</a>
+        </div>
+    </div>
+    <script src="../../assets/js/htmlIntegration.js" defer></script>
+    <script src="../../assets/js/auth.js" defer></script>
+</body>
+</html>

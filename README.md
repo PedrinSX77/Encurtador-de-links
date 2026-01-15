@@ -1,66 +1,143 @@
-🚀 ShorterLinks - Encurtador de URLs Fullstack
-Bem-vindo ao ShorterLinks, um encurtador de URLs de alta performance desenvolvido com Node.js e MySQL. Este projeto foi construído focado em escalabilidade (utilizando Pool de conexões) e uma interface moderna para o usuário.
+# 🚀 Encurtador de Links Pro
 
-🛠️ Tecnologias Utilizadas
-Backend: Node.js com Express.
+> Um encurtador de URLs moderno, seguro e performático, construído com **Node.js**, **MySQL** e **JWT**.
 
-Banco de Dados: MySQL (Baremetal) com biblioteca mysql2.
+Este projeto foi desenvolvido com foco em **segurança**, **organização de código** e **experiência do usuário**, sendo ideal como projeto de portfólio Full Stack.
 
-Segurança: Variáveis de ambiente com dotenv.
+---
 
-Identificadores: nanoid para geração de códigos curtos e únicos de 5 caracteres.
+## 📌 Versão
 
-Frontend: HTML5, CSS3 (Modern Dark Mode) e JavaScript Vanilla.
+**v1.1** — Sistema de usuários, autenticação e proteção de rotas
 
-📋 Funcionalidades
-✅ Encurtamento de links via interface web.
+---
 
-✅ Redirecionamento automático e dinâmico.
+## 🆕 Novidades da v1.1
 
-✅ Botão de cópia rápida para o link gerado.
+Em comparação à versão inicial, esta release traz melhorias importantes:
 
-✅ Banco de dados persistente para salvar todos os links.
+* 🔐 **Autenticação JWT (JSON Web Token)**
+  Apenas usuários autenticados podem criar links encurtados.
 
-✅ Estrutura preparada para expansão (Middlewares e Connection Pool).
+* 👤 **Sistema de Login e Registro**
+  Cadastro de usuários com senhas criptografadas utilizando **Bcrypt**.
 
-🔧 Como instalar e rodar o projeto
-1. Clonar o repositório
+* 💾 **Persistência de Sessão**
+  Token armazenado no **LocalStorage**, mantendo o usuário logado.
 
-git clone https://github.com/PedrinSX77/shorterlinks.git
-cd shorterlinks
-2. Instalar dependências
+* 🛡️ **Middleware de Segurança**
+  Validação automática do token antes do acesso às rotas protegidas.
 
+* 🌙 **Interface em Dark Mode**
+  Design moderno, responsivo e focado em UX.
+
+---
+
+## 🛠️ Tecnologias Utilizadas
+
+### Backend
+
+* Node.js
+* Express.js
+* MySQL (`mysql2/promise`)
+
+### Segurança
+
+* JSON Web Token (JWT)
+* BcryptJS
+
+### Frontend
+
+* HTML5
+* CSS3 (Glassmorphism)
+* JavaScript Vanilla
+
+---
+
+## 📂 Estrutura do Projeto
+
+```text
+├── src/
+│   ├── controllers/     # Lógica de negócio (Auth e Links)
+│   ├── middlewares/     # Middleware de autenticação (verificarToken)
+│   └── routes/          # Definição das rotas da API
+│
+├── public/              # Arquivos estáticos (HTML, CSS, JS)
+├── db.js                # Conexão com o banco de dados
+├── index.js             # Ponto de entrada da aplicação
+└── .env                 # Variáveis de ambiente (não versionado)
+```
+
+---
+
+## 🚀 Instalação e Execução
+
+### 1️⃣ Clone o repositório
+
+```bash
+git clone https://github.com/PedrinSX77/Encurtador-de-links.git
+```
+
+### 2️⃣ Instale as dependências
+
+```bash
 npm install
-3. Configurar o Banco de Dados
-Crie uma tabela no seu MySQL usando o seguinte comando SQL:
+```
 
-CREATE TABLE links (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    url_original TEXT NOT NULL,
-    short_code VARCHAR(5) NOT NULL UNIQUE,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-4. Configurar Variáveis de Ambiente
-Crie um arquivo .env na raiz do projeto e preencha com suas credenciais:
+### 3️⃣ Configure o banco de dados
 
+Crie as tabelas **users** e **links** no seu MySQL.
 
-DB_HOST=seu_host_aqui
-DB_USER=seu_usuario_aqui
-DB_PASS=sua_senha_aqui
-DB_NAME=shorterlinks
+> ⚠️ O script SQL pode ser adicionado futuramente para facilitar a instalação.
+
+### 4️⃣ Configure as variáveis de ambiente
+
+Crie um arquivo `.env` na raiz do projeto:
+
+```env
 PORT=3000
-5. Iniciar o servidor
+DB_HOST=localhost
+DB_USER=seu_usuario
+DB_PASS=sua_senha
+DB_NAME=seu_banco
+JWT_SECRET=sua_chave_secreta_aqui
+```
 
+### 5️⃣ Inicie o servidor
+
+```bash
 node index.js
-Acesse: http://localhost:3000
+```
 
-📁 Estrutura do Projeto
-Plaintext
+A aplicação estará disponível em:
 
-├── assets/         # CSS e JS do frontend
-├── db.js           # Configuração do Pool de conexão MySQL
-├── index.js        # Servidor Express e Rotas da API
-├── index.html      # Página principal
-├── .env            # Variáveis sensíveis (não incluído no Git)
-├── package.json    # Gerenciador de dependências
-└── README.md       # Documentação do projeto
+```
+http://localhost:3000
+```
+
+---
+
+## 🔒 Segurança
+
+* Senhas armazenadas com **Salt Hashing (12 rounds)**
+* Tokens JWT com **expiração de 24 horas**
+* Rotas sensíveis protegidas por middleware
+
+Mesmo em caso de vazamento de dados, as credenciais permanecem seguras.
+
+---
+
+## 📈 Próximas melhorias (Roadmap)
+
+* 📊 Dashboard de estatísticas de links
+* ⏳ Expiração personalizada de URLs
+* 🧑‍💼 Sistema de permissões (roles)
+* 📄 Documentação com Swagger
+
+---
+
+## 👨‍💻 Autor
+
+Desenvolvido por **PedrinSX777**
+
+Se curtir o projeto, ⭐ deixe uma estrela no repositório!
