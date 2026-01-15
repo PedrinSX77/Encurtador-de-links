@@ -7,7 +7,7 @@ exports.encurtarLink = async (req, res) => {
     const shortCode = nanoid(5);
     
     try {
-        const sql = 'INSERT INTO links (url_original, short_code) VALUES (?, ?)'
+        const sql = 'INSERT INTO links (urlOriginal, shortCode) VALUES (?, ?)'
         await db.execute(sql, [urlOriginal, shortCode])
         res.json({ message: "Link encurtado!", shortCode });
     } catch (error) {
@@ -20,14 +20,14 @@ exports.redirecionarLink = async (req, res) => {
     const { code } = req.params;
 
     try {
-        const sql = 'SELECT url_original FROM links WHERE short_code = ?';
+        const sql = 'SELECT urlOriginal FROM links WHERE shortCode = ?';
         const [rows] = await db.execute(sql, [code]);
 
         if (rows.length === 0) {
             return res.status(404).send("Link não encontrado");
         }
 
-        const urlDestino = rows[0].url_original;
+        const urlDestino = rows[0].urlOriginal;
         return res.redirect(urlDestino);
 
     } catch (error) {
