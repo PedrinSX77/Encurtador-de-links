@@ -88,7 +88,23 @@ npm install
 
 Crie as tabelas **users** e **links** no seu MySQL.
 
-> ⚠️ O script SQL pode ser adicionado futuramente para facilitar a instalação.
+CREATE TABLE users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE links (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    urlOriginal TEXT NOT NULL,
+    shortCode VARCHAR(5) NOT NULL UNIQUE,
+    userId INT,
+    clicks INT DEFAULT 0,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (userId) REFERENCES users(id) ON DELETE CASCADE
+);
 
 ### 4️⃣ Configure as variáveis de ambiente
 
