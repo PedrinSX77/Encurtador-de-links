@@ -55,15 +55,16 @@ curl -s https://raw.githubusercontent.com/PedrinSX77/Encurtador-de-links/main/in
 
 Atenção: O script solicitará suas credenciais do MySQL para criar o banco e as tabelas automaticamente.
 
-⚙️ Gerenciamento do Servidor
+## ⚙️ Gerenciamento do Servidor
 Com o servidor rodando via PM2, utilize estes comandos para controle total:
 
 Objetivo,Comando
-Ver Status,pnpm exec pm2 status
+```Ver Status,pnpm exec pm2 status
 Ver Logs,pnpm run logs
 Painel Visual,pnpm exec pm2 monit
 Parar App,pnpm run stop
 Reiniciar,pnpm exec pm2 restart encurtador
+```
 
 📂 Estrutura do Projeto
 ```
@@ -77,7 +78,7 @@ Reiniciar,pnpm exec pm2 restart encurtador
 └── .env                 # Configurações sensíveis (gerado no deploy)
 ```
 
-🔒 Segurança
+## 🔒 Segurança
 Autenticação: Apenas usuários logados podem gerenciar links.
 
 Senhas: Criptografia Salt Hashing de 12 rounds via Bcrypt.
