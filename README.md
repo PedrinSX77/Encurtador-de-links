@@ -1,3 +1,5 @@
+![Status](https://img.shields.io/website?url=https%3A%2F%2Furl.odysseycloud.com.br%2F)
+
 # 🚀 Encurtador de Links Pro — v1.2.2
 
 > Um encurtador de URLs moderno, seguro e performático, construído com **Node.js**, **MySQL** e **JWT**. Agora com **Auto-Deploy** via PM2 e PNPM.
@@ -16,6 +18,17 @@ A evolução do projeto agora foca em **DevOps e Estabilidade**:
 * **📦 Eficiência com PNPM**: Gerenciamento de pacotes ultra-rápido e otimizado para o servidor.
 
 ---
+## 🌐 Teste Agora (Live Demo)
+
+O projeto está rodando em ambiente de produção! Você pode testar a interface, criar sua conta e gerar seus links encurtados com SSL através do link oficial:
+
+🔗 **[https://url.odysseycloud.com.br/](https://url.odysseycloud.com.br/)**
+
+### 🧪 O que testar?
+1. **Registro/Login:** Crie uma conta para ter seu próprio painel.
+2. **Encurtamento:** Cole uma URL longa e veja a mágica do link dinâmico.
+3. **Analytics:** Clique no link gerado e veja o contador de cliques atualizar em tempo real.
+4. **HTTPS:** Repare no cadeado de segurança gerenciado pelo Nginx + Certbot.
 
 ## 🛠️ Tecnologias Utilizadas
 
