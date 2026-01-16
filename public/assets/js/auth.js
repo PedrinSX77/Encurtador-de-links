@@ -14,7 +14,7 @@ async function doRegister() {
 
         if (response.ok) {
             alert(data.message);
-            window.location.href = '/auth/login';
+            window.location.href = '/login';
         } else {
             alert(data.error || "Erro no cadastro");
         }
