@@ -1,4 +1,4 @@
-![Status](https://img.shields.io/website?url=https%3A%2F%2Furl.odysseycloud.com.br%2F)
+![Website Status](https://img.shields.io/website?url=https%3A%2F%2Furl.odysseycloud.com.br%2F&label=Status%20do%20Encurtador&style=for-the-badge)
 
 # 🚀 Encurtador de Links Pro — v1.2.2
 
