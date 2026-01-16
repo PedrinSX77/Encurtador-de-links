@@ -52,10 +52,10 @@ if [ ! -f .env ]; then
 
     echo -e "${YELLOW}🗄️ Criando banco e tabelas...${NC}"
     
-    # Execução do SQL via CLI com aspas no EOF para evitar expansão de variáveis indesejadas
-    mysql -h "$db_host" -u "$db_user" -p"$db_pass" <<'EOF' || { echo -e "${RED}❌ Falha na conexão MySQL. Verifica os teus dados.${NC}"; exit 1; }
-CREATE DATABASE IF NOT EXISTS shorterlinks;
-USE shorterlinks;
+    # Execução do SQL via CLI - Corrigido para usar a variável $db_name
+    mysql -h "$db_host" -u "$db_user" -p"$db_pass" <<EOF || { echo -e "${RED}❌ Falha na conexão MySQL. Verifica os teus dados.${NC}"; exit 1; }
+CREATE DATABASE IF NOT EXISTS $db_name;
+USE $db_name;
 
 CREATE TABLE IF NOT EXISTS users (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -75,6 +75,7 @@ CREATE TABLE IF NOT EXISTS links (
     FOREIGN KEY (userId) REFERENCES users(id) ON DELETE CASCADE
 );
 EOF
+
     echo -e "${GREEN}   ✅ Banco de dados e tabelas validados!${NC}"
 
     # --- GERAÇÃO DO .ENV ---
