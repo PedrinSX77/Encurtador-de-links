@@ -37,7 +37,7 @@ A evolução do projeto agora foca em **DevOps e Estabilidade**:
 Se você utiliza um ambiente Linux (VPS, Ubuntu, etc), execute o comando abaixo para realizar o clone, configurar o banco de dados, instalar dependências e iniciar o servidor de uma só vez:
 
 ```bash
-bash <(curl -s [https://raw.githubusercontent.com/PedrinSX77/Encurtador-de-links/main/install.sh](https://raw.githubusercontent.com/PedrinSX77/Encurtador-de-links/main/install.sh))
+curl -s https://raw.githubusercontent.com/PedrinSX77/Encurtador-de-links/main/install.sh | bash
 ```
 
 Atenção: O script solicitará suas credenciais do MySQL para criar o banco e as tabelas automaticamente.
