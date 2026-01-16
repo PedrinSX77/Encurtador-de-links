@@ -37,7 +37,8 @@ A evolução do projeto agora foca em **DevOps e Estabilidade**:
 Se você utiliza um ambiente Linux (VPS, Ubuntu, etc), execute o comando abaixo para realizar o clone, configurar o banco de dados, instalar dependências e iniciar o servidor de uma só vez:
 
 ```bash
-bash <(curl -s [https://raw.githubusercontent.com/PedrinSX77/Encurtador-de-links/main/install.sh](https://raw.githubusercontent.com/PedrinSX77/Encurtador-de-links/main/install.sh))```
+bash <(curl -s [https://raw.githubusercontent.com/PedrinSX77/Encurtador-de-links/main/install.sh](https://raw.githubusercontent.com/PedrinSX77/Encurtador-de-links/main/install.sh))
+```
 
 Atenção: O script solicitará suas credenciais do MySQL para criar o banco e as tabelas automaticamente.
 
@@ -52,7 +53,7 @@ Parar App,pnpm run stop
 Reiniciar,pnpm exec pm2 restart encurtador
 
 📂 Estrutura do Projeto
-
+```
 ├── src/
 │   ├── controllers/     # Lógica de autenticação e links
 │   ├── middlewares/     # Validação de tokens JWT
@@ -61,6 +62,7 @@ Reiniciar,pnpm exec pm2 restart encurtador
 ├── install.sh           # Script de instalação automática
 ├── index.js             # Ponto de entrada da aplicação
 └── .env                 # Configurações sensíveis (gerado no deploy)
+```
 
 🔒 Segurança
 Autenticação: Apenas usuários logados podem gerenciar links.
