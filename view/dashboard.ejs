@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/assets/css/style.css">
+    <title>Dashboard - Links</title>
+</head>
+
+<body>
+    <header class="navbar">
+        <div class="nav-container">
+            <button class="btn-dashboard" onclick="window.location.href='/'">Home</button>
+            <button class="btn-dashboard logout" onclick="logout()">Deslogar</button>
+        </div>
+    </header>
+    <div id="lista-links" class="links-grid">
+        <!-- Links encurtados serão inseridos aqui dinamicamente -->
+    </div>
+
+    <div id="no-links" style="display: none; text-align: center; margin-top: 2rem;">
+        <p>Você ainda não tem links encurtados. Comece agora! Clique em Home e crie seu link curto!</p>
+    </div>
+
+    <script src="/assets/js/htmlIntegration.js" defer></script>
+    <script src="/assets/js/api.js"></script>
+</body>
+
+</html>

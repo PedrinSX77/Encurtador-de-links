@@ -1,7 +1,7 @@
 async function encurtar() {
     const token = localStorage.getItem('token');
     const url = document.getElementById('urlInput').value;
-    const btn = document.querySelector('button');
+    const btn = document.getElementById('btn-gerar');
     const resContainer = document.getElementById('resultado-container');
 
     if (!url) return alert("Por favor, cole uma URL!");
@@ -10,14 +10,14 @@ async function encurtar() {
     btn.disabled = true;
 
     try {
-        const res = await fetch('/encurtar', {
-        method: 'POST',
-        headers: { 
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}` 
-        },
-        body: JSON.stringify({ urlOriginal: url })
-    });
+        const res = await fetch('/api/links/encurtar', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({ urlOriginal: url })
+        });
 
         const data = await res.json();
 
@@ -42,8 +42,8 @@ function copiarLink() {
     navigator.clipboard.writeText(link).then(() => {
         const btn = document.querySelector('.btn-copy');
         btn.innerText = "Copiado!";
-        btn.style.background = "#22c55e"; 
-        
+        btn.style.background = "#22c55e";
+
         setTimeout(() => {
             btn.innerText = "Copiar";
             btn.style.background = "#38bdf8";
@@ -51,9 +51,67 @@ function copiarLink() {
     });
 }
 
-function logout() {
-    localStorage.removeItem('token');
-    window.location.href = '/auth/login';
+async function logout() {
+    try {
+        await fetch('/api/auth/logout', { method: 'POST' });
+    } finally {
+        localStorage.removeItem('token'); 
+        window.location.href = '/login'; 
+    }
+}
+
+async function carregarDashboard() {
+    const token = localStorage.getItem('token');
+    // Referências do htmlIntegration.js
+    const container = document.getElementById('lista-links'); 
+    const noLinksMsg = document.getElementById('no-links');
+
+    try {
+        const response = await fetch('/api/links/listar', {
+            method: 'GET',
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+
+        const data = await response.json();
+
+        // LIMPE SEMPRE O CONTAINER PRIMEIRO
+        container.innerHTML = ''; 
+
+        if (data.links && data.links.length > 0) {
+            noLinksMsg.style.display = 'none';
+            
+            data.links.forEach(link => {
+                const urlCurta = `${window.location.origin}/${link.shortCode}`;
+                // Insere os cards retangulares que você criou
+                container.innerHTML += `
+                    <div class="link-card-horizontal">
+                        <div class="link-content">
+                            <span class="url-original-label">Original:</span>
+                            <p class="url-original-text" title="${link.urlOriginal}">${link.urlOriginal}</p>
+                            <a href="${urlCurta}" target="_blank" class="url-curta-link">${urlCurta}</a>
+                        </div>
+                        
+                        <div class="link-stats">
+                            <span class="clicks-badge"><b>${link.clicks || 0}</b> cliques</span>
+                        </div>
+
+                        <div class="link-actions">
+                            <button class="btn-copy" onclick="copiarLinkDireto('${urlCurta}')">Copiar</button>
+                            <button class="btn-del" onclick="deletarLink('${link.id}')">Excluir</button>
+                        </div>
+                    </div>
+                `;
+            });
+        } else {
+            // Se não houver nada, mostra a mensagem de vazio
+            noLinksMsg.style.display = 'block';
+        }
+    } catch (err) {
+        console.error("Erro ao carregar dashboard:", err);
+    }
+}
+if (window.location.pathname.includes('dashboard')) {
+    document.addEventListener('DOMContentLoaded', carregarDashboard);
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -61,10 +119,29 @@ document.addEventListener('DOMContentLoaded', () => {
     const modal = document.getElementById('modal-bloqueio');
 
     if (!token) {
-        modal.style.display = 'flex'; 
-        
+        modal.style.display = 'flex';
+
         setTimeout(() => {
-            if(!token) window.location.href = '/auth/login/';
+            if (!token) window.location.href = '/login/';
         }, 3000);
     }
 });
+
+async function deletarLink(id) {
+    if (!confirm("Tem certeza que deseja excluir este link?")) return; //
+
+    const token = localStorage.getItem('token'); //
+    try {
+        const res = await fetch(`/api/links/${id}`, {
+            method: 'DELETE',
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+
+        if (res.ok) {
+            // Em vez de reload(), chamamos a função que desenha a tela
+            carregarDashboard(); 
+        }
+    } catch (err) {
+        alert("Erro ao excluir.");
+    }
+}

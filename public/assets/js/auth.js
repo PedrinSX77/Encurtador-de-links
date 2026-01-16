@@ -4,7 +4,7 @@ async function doRegister() {
     const pass = password.value;
 
     try {
-        const response = await fetch('/auth/register', { 
+        const response = await fetch('/api/auth/register', { 
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ username: user, email: mail, password: pass })
@@ -28,7 +28,7 @@ async function doLogin() {
     const pass = document.getElementById('password').value;
 
     try {
-        const response = await fetch('/auth/login', {
+        const response = await fetch('/api/auth/login', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ email: mail, password: pass })

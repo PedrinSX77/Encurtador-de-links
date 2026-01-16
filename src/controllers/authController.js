@@ -42,6 +42,12 @@ exports.login = async (req, res) => {
             process.env.JWT_SECRET,
             { expiresIn: '24h' }
         );
+        
+        res.cookie('token', token, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            maxAge: 864e5 // 1 dia
+        });
 
         return res.status(200).json({
             message: "Login realizado com sucesso!",
@@ -53,3 +59,8 @@ exports.login = async (req, res) => {
         return res.status(500).json({ error: "Erro ao processar o login." });
     }
 }
+
+exports.logout = (req, res) => {
+    res.clearCookie('token'); // Isso remove o cookie de segurança
+    return res.status(200).json({ message: "Logout realizado no servidor!" });
+};

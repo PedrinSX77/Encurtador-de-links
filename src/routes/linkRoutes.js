@@ -5,7 +5,7 @@ const linkController = require('../controllers/linkController');
 const { verificarToken } = require('../middlewares/authMiddleware');
 
 router.post('/encurtar', verificarToken, linkController.encurtarLink);
-
-router.get('/:code', linkController.redirecionarLink);
+router.get('/listar', verificarToken, linkController.listLinks);
+router.delete('/:id', verificarToken, linkController.deleteLink);
 
 module.exports = router;

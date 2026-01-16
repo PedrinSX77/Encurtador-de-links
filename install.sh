@@ -1,0 +1,107 @@
+#!/bin/bash
+
+# --- CONFIGURAÇÕES DE CORES ---
+GREEN='\033[0;32m'
+RED='\033[0;31m'
+YELLOW='\033[1;33m'
+NC='\033[0m' # No Color
+
+# --- CABEÇALHO ---
+echo -e "${GREEN}"
+echo "  _____ _                _              _     _       _        "
+echo " / ____| |              | |            | |   (_)     | |       "
+echo "| (___ | |__   ___  _ __| |_ ___ _ __  | |    _ _ __ | | _____ "
+echo " \___ \| '_ \ / _ \| '__| __/ _ \ '__| | |   | | '_ \| |/ / __|"
+echo " ____) | | | | (_) | |  | ||  __/ |    | |___| | | | |   <\__ \\"
+echo "|_____/|_| |_|\___/|_|   \__\___|_|    |_____|_|_| |_|_|\_\___/"
+echo -e "                      Versão 1.2.2 - Deploy Automático${NC}\n"
+
+TARGET_DIR="shorterlinks"
+
+# --- VERIFICAÇÃO DE DEPENDÊNCIAS ---
+echo -e "${YELLOW}[1/6] Verificando requisitos do sistema...${NC}"
+for cmd in git mysql curl; do
+    if ! command -v $cmd &> /dev/null; then
+        echo -e "${RED}❌ Erro: O comando '$cmd' não foi encontrado. Instale-o e tente novamente.${NC}"
+        exit 1
+    fi
+done
+
+# --- CLONAGEM DO REPOSITÓRIO ---
+echo -e "${YELLOW}[2/6] Clonando repositório...${NC}"
+if [ ! -d "$TARGET_DIR" ]; then
+    git clone https://github.com/PedrinSX77/Encurtador-de-links.git $TARGET_DIR || { echo -e "${RED}❌ Erro ao clonar.${NC}"; exit 1; }
+fi
+cd $TARGET_DIR || exit
+
+# --- CONFIGURAÇÃO DO BANCO DE DADOS ---
+if [ ! -f .env ]; then
+    echo -e "${YELLOW}[3/6] Configurando banco de dados MySQL...${NC}"
+    read -p "   🔹 Host (localhost): " db_host
+    db_host=${db_host:-localhost}
+    read -p "   🔹 Usuário (root): " db_user
+    db_user=${db_user:-root}
+    read -s -p "   🔹 Senha: " db_pass
+    echo ""
+    read -p "   🔹 Nome do Banco (shorterlinks): " db_name
+    db_name=${db_name:-shorterlinks}
+
+    # Execução do SQL via CLI
+    mysql -h "$db_host" -u "$db_user" -p"$db_pass" <<EOF || { echo -e "${RED}❌ Falha na conexão MySQL.${NC}"; exit 1; }
+CREATE DATABASE IF NOT EXISTS $db_name;
+USE $db_name;
+CREATE TABLE IF NOT EXISTS users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+CREATE TABLE IF NOT EXISTS links (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    urlOriginal TEXT NOT NULL,
+    shortCode VARCHAR(5) NOT NULL UNIQUE,
+    userId INT,
+    clicks INT DEFAULT 0,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (userId) REFERENCES users(id) ON DELETE CASCADE
+);
+EOF
+    echo -e "${GREEN}   ✅ Banco de dados e tabelas criados!${NC}"
+
+    # --- GERAÇÃO DO .ENV ---
+    jwt_secret=$(head /dev/urandom | tr -dc A-Za-z0-9 | head -c 32)
+    cat <<EOF > .env
+PORT=3000
+DB_HOST=$db_host
+DB_USER=$db_user
+DB_PASS=$db_pass
+DB_NAME=$db_name
+JWT_SECRET=$jwt_secret
+EOF
+fi
+
+# --- INSTALAÇÃO DO PNPM ---
+echo -e "${YELLOW}[4/6] Configurando gerenciador de pacotes...${NC}"
+if ! command -v pnpm &> /dev/null; then
+    curl -fsSL https://get.pnpm.io/install.sh | sh -
+    export PNPM_HOME="$HOME/.local/share/pnpm"
+    export PATH="$PNPM_HOME:$PATH"
+fi
+
+# --- INSTALAÇÃO DE DEPENDÊNCIAS ---
+echo -e "${YELLOW}[5/6] Instalando dependências do Node.js...${NC}"
+pnpm install && pnpm add -g pm2
+
+# --- DEPLOY COM PM2 ---
+echo -e "${YELLOW}[6/6] Iniciando servidor em background...${NC}"
+pnpm exec pm2 delete encurtador 2>/dev/null || true
+pnpm exec pm2 start index.js --name encurtador --watch
+pnpm exec pm2 save
+
+# --- CONCLUSÃO ---
+echo -e "\n${GREEN}===================================================="
+echo "🎉 INSTALAÇÃO CONCLUÍDA COM SUCESSO!"
+echo "🌐 URL: http://localhost:3000"
+echo "📊 Painel PM2: pnpm exec pm2 status"
+echo -e "====================================================${NC}"

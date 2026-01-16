@@ -7,16 +7,20 @@
 </head>
 
 <body>
-
-    <body>
-        <button onclick="logout()">Sair</button>
-        <div class="container">
+    <header class="navbar">
+        <div class="nav-container">
+            <button class="btn-dashboard" onclick="window.location.href='dashboard'">Meus Links</button>
+            <button class="btn-dashboard logout" onclick="logout()">Deslogar</button>
+        </div>
+    </header>
+    <div class="container">
+        <div class="form">
             <h1>ShorterLinks</h1>
             <p class="subtitle">Insira a URL completa (com https://)</p>
 
             <div class="input-group">
                 <input type="text" id="urlInput" placeholder="Ex: https://google.com.br">
-                <button onclick="encurtar()">Gerar Link Curto</button>
+                <button id="btn-gerar" onclick="encurtar()">Gerar Link Curto</button>
             </div>
 
             <div id="resultado-container">
@@ -27,14 +31,15 @@
                 </div>
             </div>
         </div>
-        <div id="modal-bloqueio">
-            <div class="modal-content">
-                <h2>Acesso Restrito</h2>
-                <p>Você precisa estar logado para encurtar links.</p>
-                <button onclick="window.location.href='/auth/login/'">Ir para Login</button>
-            </div>
+    </div>
+    <div id="modal-bloqueio">
+        <div class="modal-content">
+            <h2>Acesso Restrito</h2>
+            <p>Você precisa estar logado para encurtar links.</p>
+            <button onclick="window.location.href='/login'">Ir para Login</button>
         </div>
-        <script src="assets/js/api.js" defer></script>
-    </body>
+    </div>
+    <script src="assets/js/api.js" defer></script>
+</body>
 
 </html>

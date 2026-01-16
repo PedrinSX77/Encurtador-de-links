@@ -1,159 +1,77 @@
-# 🚀 Encurtador de Links Pro
+# 🚀 Encurtador de Links Pro — v1.2.2
 
-> Um encurtador de URLs moderno, seguro e performático, construído com **Node.js**, **MySQL** e **JWT**.
+> Um encurtador de URLs moderno, seguro e performático, construído com **Node.js**, **MySQL** e **JWT**. Agora com **Auto-Deploy** via PM2 e PNPM.
 
-Este projeto foi desenvolvido com foco em **segurança**, **organização de código** e **experiência do usuário**, sendo ideal como projeto de portfólio Full Stack.
-
----
-
-## 📌 Versão
-
-**v1.1** — Sistema de usuários, autenticação e proteção de rotas
+Este projeto foca em **segurança**, **organização de código** e **automação**, sendo ideal para quem busca uma solução robusta e pronta para produção.
 
 ---
 
-## 🆕 Novidades da v1.1
+## 🆕 Novidades da Versão v1.2.2
 
-Em comparação à versão inicial, esta release traz melhorias importantes:
+A evolução do projeto agora foca em **DevOps e Estabilidade**:
 
-* 🔐 **Autenticação JWT (JSON Web Token)**
-  Apenas usuários autenticados podem criar links encurtados.
-
-* 👤 **Sistema de Login e Registro**
-  Cadastro de usuários com senhas criptografadas utilizando **Bcrypt**.
-
-* 💾 **Persistência de Sessão**
-  Token armazenado no **LocalStorage**, mantendo o usuário logado.
-
-* 🛡️ **Middleware de Segurança**
-  Validação automática do token antes do acesso às rotas protegidas.
-
-* 🌙 **Interface em Dark Mode**
-  Design moderno, responsivo e focado em UX.
+* **⚡ Instalação Automática**: Script interativo (`install.sh`) que configura banco de dados, tabelas e ambiente com um comando.
+* **🔄 Gerenciamento 24h**: Integração com **PM2**, garantindo que o servidor reinicie sozinho em caso de falhas ou reboot do sistema.
+* **🔑 Segurança Reforçada**: Geração automática de chaves `JWT_SECRET` únicas para cada instalação.
+* **📦 Eficiência com PNPM**: Gerenciamento de pacotes ultra-rápido e otimizado para o servidor.
 
 ---
 
 ## 🛠️ Tecnologias Utilizadas
 
-### Backend
+### Infraestrutura & Deploy
+* **PM2**: Gerenciador de processos para uptime 24/7.
+* **PNPM**: Gerenciador de pacotes performático.
+* **Bash Script**: Automação total do fluxo de deploy.
 
-* Node.js
-* Express.js
-* MySQL (`mysql2/promise`)
-
-### Segurança
-
-* JSON Web Token (JWT)
-* BcryptJS
-
-### Frontend
-
-* HTML5
-* CSS3 (Glassmorphism)
-* JavaScript Vanilla
+### Backend & Frontend
+* **Node.js & Express**: Base da aplicação e roteamento.
+* **MySQL**: Armazenamento persistente de usuários e links.
+* **JWT & Bcrypt**: Autenticação e criptografia de senhas.
+* **Glassmorphism UI**: Interface moderna em Dark Mode focada em UX.
 
 ---
 
-## 📂 Estrutura do Projeto
+## 🚀 Instalação Rápida (O Comando Mágico)
 
-```text
+Se você utiliza um ambiente Linux (VPS, Ubuntu, etc), execute o comando abaixo para realizar o clone, configurar o banco de dados, instalar dependências e iniciar o servidor de uma só vez:
+
+```bash
+bash <(curl -s [https://raw.githubusercontent.com/PedrinSX77/Encurtador-de-links/main/install.sh](https://raw.githubusercontent.com/PedrinSX77/Encurtador-de-links/main/install.sh))```
+
+Atenção: O script solicitará suas credenciais do MySQL para criar o banco e as tabelas automaticamente.
+
+⚙️ Gerenciamento do Servidor
+Com o servidor rodando via PM2, utilize estes comandos para controle total:
+
+Objetivo,Comando
+Ver Status,pnpm exec pm2 status
+Ver Logs,pnpm run logs
+Painel Visual,pnpm exec pm2 monit
+Parar App,pnpm run stop
+Reiniciar,pnpm exec pm2 restart encurtador
+
+📂 Estrutura do Projeto
+
 ├── src/
-│   ├── controllers/     # Lógica de negócio (Auth e Links)
-│   ├── middlewares/     # Middleware de autenticação (verificarToken)
-│   └── routes/          # Definição das rotas da API
-│
-├── public/              # Arquivos estáticos (HTML, CSS, JS)
-├── db.js                # Conexão com o banco de dados
+│   ├── controllers/     # Lógica de autenticação e links
+│   ├── middlewares/     # Validação de tokens JWT
+│   └── routes/          # Definição dos endpoints da API
+├── public/              # Interface Web (HTML, CSS, JS)
+├── install.sh           # Script de instalação automática
 ├── index.js             # Ponto de entrada da aplicação
-└── .env                 # Variáveis de ambiente (não versionado)
-```
+└── .env                 # Configurações sensíveis (gerado no deploy)
 
----
+🔒 Segurança
+Autenticação: Apenas usuários logados podem gerenciar links.
 
-## 🚀 Instalação e Execução
+Senhas: Criptografia Salt Hashing de 12 rounds via Bcrypt.
 
-### 1️⃣ Clone o repositório
+Tokens: JWT com expiração automática de 24 horas.
 
-```bash
-git clone https://github.com/PedrinSX77/Encurtador-de-links.git
-```
+Proteção: Middlewares validam o acesso a rotas sensíveis.
 
-### 2️⃣ Instale as dependências
+👨‍💻 Autor
+Desenvolvido por PedrinSX77 🚀
 
-```bash
-npm install
-```
-
-### 3️⃣ Configure o banco de dados
-
-Crie as tabelas **users** e **links** no seu MySQL.
-
-CREATE TABLE users (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    username VARCHAR(255) NOT NULL,
-    email VARCHAR(255) NOT NULL UNIQUE,
-    password VARCHAR(255) NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
-CREATE TABLE links (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    urlOriginal TEXT NOT NULL,
-    shortCode VARCHAR(5) NOT NULL UNIQUE,
-    userId INT,
-    clicks INT DEFAULT 0,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (userId) REFERENCES users(id) ON DELETE CASCADE
-);
-
-### 4️⃣ Configure as variáveis de ambiente
-
-Crie um arquivo `.env` na raiz do projeto:
-
-```env
-PORT=3000
-DB_HOST=localhost
-DB_USER=seu_usuario
-DB_PASS=sua_senha
-DB_NAME=seu_banco
-JWT_SECRET=sua_chave_secreta_aqui
-```
-
-### 5️⃣ Inicie o servidor
-
-```bash
-node index.js
-```
-
-A aplicação estará disponível em:
-
-```
-http://localhost:3000
-```
-
----
-
-## 🔒 Segurança
-
-* Senhas armazenadas com **Salt Hashing (12 rounds)**
-* Tokens JWT com **expiração de 24 horas**
-* Rotas sensíveis protegidas por middleware
-
-Mesmo em caso de vazamento de dados, as credenciais permanecem seguras.
-
----
-
-## 📈 Próximas melhorias (Roadmap)
-
-* 📊 Dashboard de estatísticas de links
-* ⏳ Expiração personalizada de URLs
-* 🧑‍💼 Sistema de permissões (roles)
-* 📄 Documentação com Swagger
-
----
-
-## 👨‍💻 Autor
-
-Desenvolvido por **PedrinSX777**
-
-Se curtir o projeto, ⭐ deixe uma estrela no repositório!
+Se este projeto foi útil para você, deixe uma ⭐ no repositório!
