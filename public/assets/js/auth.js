@@ -1,51 +1,68 @@
 async function doRegister() {
-    const user = username.value;
-    const mail = email.value;
-    const pass = password.value;
+  const user = username.value;
+  const mail = email.value;
+  const pass = password.value;
 
-    try {
-        const response = await fetch('/api/auth/register', { 
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ username: user, email: mail, password: pass })
-        });
+  try {
+    const response = await fetch('/api/auth/register', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username: user, email: mail, password: pass })
+    });
 
-        const data = await response.json();
+    const data = await response.json();
 
-        if (response.ok) {
-            alert(data.message);
-            window.location.href = '/auth/login';
-        } else {
-            alert(data.error || "Erro no cadastro");
-        }
-    } catch (err) {
-        alert("Erro de conexão com o servidor.");
+    if (response.ok) {
+      alert(data.message);
+      window.location.href = '/login';
+      return;
     }
+    const msg =
+      Array.isArray(data?.errors)
+        ? data.errors.map(e => e.message).join('\n')
+        : data?.error
+          ? data.error
+          : data?.message
+            ? data.message
+            : 'Erro no cadastro';
+
+    alert(msg);
+
+  } catch (err) {
+    alert('Erro de conexão com o servidor.');
+  }
 }
 
+
 async function doLogin() {
-    const mail = document.getElementById('email').value;
-    const pass = document.getElementById('password').value;
+  const mail = document.getElementById('email').value;
+  const pass = document.getElementById('password').value;
 
-    try {
-        const response = await fetch('/api/auth/login', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email: mail, password: pass })
-        });
+  try {
+    const response = await fetch('/api/auth/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: mail, password: pass })
+    });
 
-        const data = await response.json();
+    const data = await response.json();
 
-        if (response.ok && data.token) {
-            localStorage.setItem('token', data.token);
-            console.log("TOKEN GRAVADO NO STORAGE!");
-            window.location.href = '/';
-        } else {
-            console.error("O servidor não enviou o campo 'token'. Verifique o Controller.");
-            alert("Erro crítico: Token não recebido.");
-        }
+    if (response.ok) {
+      alert(data.message || 'Login realizado!');
+      window.location.href = '/'; 
+      return;
+    } 
+    const msg =
+      Array.isArray(data?.errors)
+        ? data.errors.map(e => e.message).join('\n')
+        : data?.error
+        ? data.error
+        : data?.message
+        ? data.message
+        : 'Erro no login';
 
-    } catch (err) {
-        console.error("Erro no fetch:", err);
-    }
+    alert(msg);
+  } catch (err) {
+    console.error("Erro no fetch:", err);
+  }
 }

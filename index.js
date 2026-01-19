@@ -7,13 +7,18 @@ const cookieParser = require('cookie-parser');
 const linkRoutes = require('./src/routes/linkRoutes');
 const authRoutes = require('./src/routes/authRoutes');
 const viewRoutes = require('./src/routes/viewRoutes');
-const linkController = require('./src/controllers/linkController');
+const billingRoutes = require('./src/routes/billingRoutes');
+
 
 const app = express();
 app.use(cookieParser());
 app.use(express.json());
-app.use(express.static('public'));
+
+// Servindo arquivos estáticos da pasta "public"
+
 app.use(express.static(path.join(__dirname, 'public')));
+
+// Configurando o EJS como motor de visualização
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'view'));
 app.set('strict routing', false);
@@ -26,6 +31,10 @@ app.use('/api/auth', authRoutes);
 
 // Rotas de visualização (views)
 app.use('/', viewRoutes);
+
+// Rotas de faturamento (billing)
+
+app.use('/api/billing', billingRoutes);
 
 app.listen(PORT, () => {
     console.log(`🚀 Servidor rodando em http://localhost:${PORT}`);

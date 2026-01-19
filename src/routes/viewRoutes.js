@@ -1,7 +1,13 @@
 const express = require('express');
+const path = require('path');
 const router = express.Router();
 const { verificarToken, redirectIfAuthenticated } = require('../middlewares/authMiddleware');
 const linkController = require('../controllers/linkController');
+
+//Rota padrão (Protegida)
+router.get('/', verificarToken, (req, res) => {
+  res.sendFile(path.join(__dirname, '../../public/index.html'));
+});
 
 // Rota do Dashboard (Protegida)
 router.get('/dashboard', verificarToken, (req, res) => {
